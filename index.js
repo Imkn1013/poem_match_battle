@@ -43,7 +43,7 @@ app.get('/', (req, res) => {
   res.send("Socket.IO server is running.");
 });
 
-io.on("connection", (socket) => {
+io.on("connection", async (socket) => {
   console.log("A client connected:", socket.id);
   
   // 接続時にDBから最新の詩（投票数順）を取得して送る
