@@ -54,7 +54,7 @@ io.on("connection", async (socket) => {
         console.error('初期データ取得失敗:', err);
     }
   
-    socket.on('submit',(data)=>{
+    socket.on('submit', async (data)=>{
       const tosend={
         id: Date.now(),               // 例: 1719420000000 (超長い数字でIDにする)
         author: data.author,
