@@ -1,9 +1,83 @@
 <!doctypehtml>
 <html lang="ja">
-  <head>
-    <meta charset="UTF-8">
-  </head>
-  <body>
-    <p>maybe okay</p>
-  </body>
+<head>
+	<meta charset="UTF-8">
+	<style>
+	body {
+	  font-family: Arial, sans-serif;
+	  margin: 0;
+	  padding: 0;
+	  background-color: #fff;
+	}
+  .menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 300px;
+    height: 100%;
+    background-color: #fafad2;
+    color: #333;
+    transition: right 0.3s ease;
+    padding: 20px;
+    box-sizing: border-box;
+    z-index: 10;
+  }
+  .menu.open {
+    right: 0;
+  }
+	.hamburger {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 30px;
+    cursor: pointer;
+    z-index: 20;
+  }
+  .hamburger span {
+    display: block;
+    height: 3px;
+    width: 100%;
+    background-color: #333;
+    margin: 5px 0;
+    transition: 0.4s;
+  }
+  .hamburger.active span:nth-child(1){
+    transform: translateY(7.5px) rotate(45deg);
+  }
+  .hamburger.active span:nth-child(2){
+    transform: rotate(-180deg) translateX(-180px);
+  }
+  .hamburger.active span:nth-child(3){
+    transform: translateY(-7.5px) rotate(135deg);
+  }
+  
+	</style>
+</head>
+<body>
+  <h1>但馬歌合</h1>
+	<nav class="menu">
+		<div class="hamburger">
+			<span></span>
+			<span></span>
+			<span></span>
+		</div>
+		<ul>
+			<li><a href="#"></a></li>
+			<li><a href="#">番付</a></li>
+			<li><a href="#">秀歌集</a></li>
+			<li><a href="#"></a></li>
+			<li><a href="#">ご意見番</a></li>
+		</ul>
+	</nav>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+	$(function() {
+		$('.hamburger').click(function() {
+			$('.menu').toggleClass('open');
+			$(this).toggleClass('active');
+		});
+	});
+
+	</script>
+</body>
 </html>
