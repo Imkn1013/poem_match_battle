@@ -188,6 +188,10 @@
             
     });
     
+	const socket = io('https://poem-match-battle.onrender.com/');
+    socket.on("connect", () => {
+    	console.log("Connected to the server");
+  	});
     socket.on('get_poems',(result)=>console.log(result));
     
 	</script>
