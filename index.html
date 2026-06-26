@@ -7,7 +7,7 @@
 	  font-family: Arial, sans-serif;
 	  margin: 0;
 	  padding: 0;
-	  background-color: #fff;
+	  background-color: #fff1cf;
 	}
   .menu {
     position: fixed;
@@ -50,11 +50,25 @@
   .hamburger.active span:nth-child(3){
     transform: translateY(-7.5px) rotate(135deg);
   }
-  
+  .title{
+    max-height: 100%;
+    width: auto;
+  }
+  .header{
+    posistion:relative;
+    height:100px;
+    background-color: #A7B716;
+    display: flex;
+    align-items: center;
+  }
+  .page{
+    display:none;
+  }
 	</style>
 </head>
 <body>
-  <h1>但馬歌合</h1>
+  <header class="header">
+  <img class="title" src="https://imkn1013.github.io/poem_match_battle/title.png"/>
 	<nav class="menu">
 		<div class="hamburger">
 			<span></span>
@@ -62,22 +76,120 @@
 			<span></span>
 		</div>
 		<ul>
-			<li><a href="#"></a></li>
-			<li><a href="#">番付</a></li>
+      <li><a id="top" href="#">トップ</a></li>
+			<li><a id="rule" href="#">式目</a></li>
+      <li><a href="#">近くで詠まれた歌</a></li>
+			<li><a id="ranking" href="#">番付</a></li>
 			<li><a href="#">秀歌集</a></li>
-			<li><a href="#"></a></li>
+			<li><a id="signpost" href="#">散策の道標</a></li>
 			<li><a href="#">ご意見番</a></li>
 		</ul>
 	</nav>
+  </header>
+  <div class="page top">
+  <p>湯煙に揺れる柳、空を舞う鳥。<br>
+豊岡の何気ない情景に心が動いたなら、それはもう歌の始まりです。
+現代の歌枕を、あなたと言える言葉で紡ぐ場所。<br>三十一音に、但馬の風土をのせて。
+景色を愛で、言葉を競う、現代の歌合。</p>
+  <fieldset>
+        <h2>詩を詠む</h2>
+        <form id="poemForm">
+      <!--  <label for="area">地域</label><br>
+            <select id="area">
+                <option value="東京・下町エリア">東京・下町エリア</option>
+                <option value="京都・洛中エリア">京都・洛中エリア</option>
+                <option value="兵庫・但馬エリア">兵庫・但馬エリア</option>
+            </select><br>  !-->
+            <label for="author">詠み人</label><br>
+            <input type="text" id="author" required><br>
+            <label for="title">題（タイトル）</label><br>
+            <input type="text" id="title" required><br>
+            <label for="content">詩・歌</label><br>
+            <textarea id="content" required></textarea><br>
+            <label for="explain">説明文(任意)</label><br>
+            <input type="text" id="explain"><br>
+            <label for"image">画像を追加(任意)</label><br>
+            <input type="file" id="image" accept="image/*"><br>
+            <label for"location">現在地を追加(任意)</label><br>
+            <button id="location">取得</button><div id="location_txt"></div><br>
+            <button id="submit" type="submit">さへづる</button>
+        </form>
+    </fieldset>
+  </div>
+  <div class="page signpost">
+    <p>文学を嗜む(青空文庫に遷移します)</p>
+    <ul>
+      <li><a href="https://www.aozora.gr.jp/cards/000050/files/4249_6475.html">泉鏡花 『城崎を憶ふ』（大正15年 / 1926年）</li>
+        <li><a href="https://www.aozora.gr.jp/cards/000158/files/4710_19618.html">島崎藤村 『山陰土産』（昭和2年 / 1927年）</li>
+    </ul>
+  </div>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script>
 	$(function() {
+    $('.top').show();
 		$('.hamburger').click(function() {
 			$('.menu').toggleClass('open');
 			$(this).toggleClass('active');
 		});
+    $('#signpost').click(function(){
+      $('.page').hide();$('.signpost').show();
+    });
+    $('#top').click(function(){
+      $('.page').hide();$('.top').show();
+    });
+    
+    $('#submit').click(function(){
+      const data={
+        author:$('#author').val(),
+        title:$('#title').val(),
+        content:$('#content').val(),
+        explain:$('#explain').val()
+      };
+      console.log(data);
+      socket.emit('submit',data);
+    });
+    
 	});
-
+    
+    $('#location').click(function(){
+      console.log("okok");
+      if(!navigator.geolocation) {
+         $('#location_txt').text("お使いのブラウザは位置情報に対応していません。");
+         return;
+      }
+      $('#location_txt').text("位置情報を取得中…");
+      // 成功したときの処理
+            function successCallback(position) {
+              const latitude = position.coords.latitude;   // 緯度
+              const longitude = position.coords.longitude; // 経度
+              console.log("hogehuga");
+              $('#location_txt').html(`取得成功！<br>緯度: ${latitude}<br>経度: ${longitude}`);
+            }
+            // 失敗したときの処理（拒否された、電波が悪いなど）
+            function errorCallback(error) {
+                switch (error.code) {
+                    case error.PERMISSION_DENIED:
+                        $('#location_txt').text("位置情報の利用が拒否されました。");
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        $('#location_txt').text("位置情報が利用できません（電波状況など）。");
+                        break;
+                    case error.TIMEOUT:
+                        $('#location_txt').text("タイムアウトしました。");
+                        break;
+                    default:
+                        $('#location_txt').text("原因不明のエラーが発生しました。");
+                        break;
+                }
+            }
+            
+      //位置情報を取得（成功時の関数、失敗時の関数）
+      navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+            
+    });
+    
+    socket.on('get_poems',(result)=>console.log(result););
+    
 	</script>
 </body>
 </html>

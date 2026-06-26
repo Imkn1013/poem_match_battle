@@ -6,3 +6,5 @@ node_modules/
 
 # Mac特有の隠しファイルを無視
 .DS_Store
+
+.env
