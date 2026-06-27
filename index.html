@@ -139,8 +139,9 @@
       $('.page').hide();$('.top').show();
     });
     
-    $('#submit').click(function(){
-      const data={
+    $('#submit').click(function(e){
+		e.preventDefault();
+      	const data={
         author:$('#author').val(),
         title:$('#title').val(),
         content:$('#content').val(),
