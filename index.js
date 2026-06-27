@@ -67,6 +67,8 @@ io.on("connection", async (socket) => {
             [tosend.id, tosend.author, tosend.title, tosend.content, tosend.explain]
         );
         console.log("DBへの保存が成功しました！");
+        const result = await pool.query('SELECT * FROM poems ORDER BY votes DESC');
+        io.emit('get_poems', result.rows);
       } catch (err) {
         console.error("DBへの保存でエラーが発生しました:", err);
       }
