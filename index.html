@@ -115,6 +115,7 @@
             <button id="submit" type="submit">さへづる</button>
         </form>
     </fieldset>
+	  <div id="poem_list"></div>
   </div>
   <div class="page signpost">
     <p>文学を嗜む(青空文庫に遷移します)</p>
@@ -127,6 +128,34 @@
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script>
 	$(function() {
+
+		const socket = io('https://poem-match-battle.onrender.com/');
+		socket.on("connect", () => {
+    		console.log("Connected to the server");
+  		});
+    	socket.on("connect", () => {
+    		console.log("Connected to the server");
+  		});
+
+    // 2. サーバーから詩の一覧を受け取った時の処理
+    socket.on('get_poems', (result) => {
+      console.log(result); // コンソール確認用
+      
+      const $list = $('#poem_list');
+      $list.empty(); // 一旦表示をクリア
+      
+      // 届いたデータをループして画面に生成
+      result.forEach(poem => {
+        $list.append(`
+          <div style="background: #fff; margin: 10px 0; padding: 15px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+            <strong style="font-size: 1.2rem;">${poem.title}</strong> <small>（詠み人: ${poem.author}）</small>
+            <p style="font-size: 1.1rem; white-space: pre-wrap; margin: 10px 0;">${poem.content}</p>
+            ${poem.explain ? `<p style="color: #666; font-size: 0.9rem;">※ ${poem.explain}</p>` : ''}
+          </div>
+        `);
+      });
+    });
+		
     $('.top').show();
 		$('.hamburger').click(function() {
 			$('.menu').toggleClass('open');
@@ -190,11 +219,6 @@
             
     });
     
-	const socket = io('https://poem-match-battle.onrender.com/');
-    socket.on("connect", () => {
-    	console.log("Connected to the server");
-  	});
-    socket.on('get_poems',(result)=>console.log(result));
     
 	</script>
 </body>
