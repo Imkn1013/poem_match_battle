@@ -48,7 +48,7 @@ io.on("connection", async (socket) => {
   // 接続時にDBから最新の詩（投票数順）を取得して送る
     try {
         const result = await pool.query('SELECT * FROM poems ORDER BY votes DESC');
-        socket.emit('get_poems', "hellow world"/*result.rows*/);
+        socket.emit('get_poems',result.rows);
     } catch (err) {
         console.error('初期データ取得失敗:', err);
     }
