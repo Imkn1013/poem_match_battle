@@ -54,6 +54,7 @@ io.on("connection", async (socket) => {
     }
   
     socket.on('submit', async (data)=>{
+      res.send("submited.");
       const tosend={
         id: Date.now(),               // 例: 1719420000000 (超長い数字でIDにする)
         author: data.author,
